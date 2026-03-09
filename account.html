@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Account</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:30px;
+margin-top:60px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+p{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#f04e23;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>My Account</h2>
+
+<p><b>Username:</b> <span id="username"></span></p>
+<p><b>Email:</b> <span id="email"></span></p>
+<p><b>Contact:</b> <span id="contact"></span></p>
+<p><b>Address:</b> <span id="address"></span></p>
+
+<button onclick="backShop()">Back to Shop</button>
+
+</div>
+
+<script>
+
+let currentUser=localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location="index.html";
+}
+
+let data=JSON.parse(localStorage.getItem(currentUser));
+
+username.textContent=data.username;
+email.textContent=data.email;
+contact.textContent=data.contact;
+address.textContent=data.address;
+
+function backShop(){
+window.location="shop.html";
+}
+
+</script>
+
+</body>
+</html>

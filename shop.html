@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nova Shop</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:#f4f4f4;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#f04e23;
+padding:10px 20px;
+color:white;
+}
+
+.logo{
+font-size:1.5rem;
+font-weight:bold;
+}
+
+.navbar input{
+width:40%;
+padding:8px;
+border-radius:20px;
+border:none;
+}
+
+.nav-links{
+display:flex;
+gap:20px;
+align-items:center;
+}
+
+.cart-box,.profile-box{
+display:flex;
+gap:5px;
+cursor:pointer;
+}
+
+.product-container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.product-card{
+background:white;
+padding:15px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-card img{
+width:100%;
+height:150px;
+object-fit:contain;
+}
+
+.price{
+color:#f04e23;
+font-weight:bold;
+}
+
+.product-card button{
+background:#f04e23;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+border-radius:5px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">Nova</div>
+
+<input type="search" id="searchInput" placeholder="Search..." onkeyup="filterProducts()">
+
+<div class="nav-links">
+
+<div class="cart-box" onclick="openCart()">🛒 <span id="cartCount">0</span></div>
+
+<div class="profile-box" onclick="openAccount()">👤 <span id="profileLink"></span></div>
+
+<div onclick="logout()">Logout</div>
+
+</div>
+
+</div>
+
+<div class="product-container" id="productContainer"></div>
+
+<script>
+
+let products=[
+{name:"Headphones",price:20,img:"https://via.placeholder.com/150"},
+{name:"Phone Case",price:8,img:"https://via.placeholder.com/150"},
+{name:"Keyboard",price:30,img:"https://via.placeholder.com/150"},
+{name:"Mouse",price:15,img:"https://via.placeholder.com/150"}
+];
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+function updateCart(){
+cartCount.textContent=cart.length;
+}
+
+function addToCart(i){
+cart.push(products[i]);
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCart();
+}
+
+function renderProducts(list=products){
+
+productContainer.innerHTML="";
+
+list.forEach((p,i)=>{
+
+productContainer.innerHTML+=`
+<div class="product-card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p class="price">$${p.price}</p>
+<button onclick="addToCart(${i})">Add To Cart</button>
+</div>
+`;
+
+});
+
+}
+
+function filterProducts(){
+let input=searchInput.value.toLowerCase();
+let filtered=products.filter(p=>p.name.toLowerCase().includes(input));
+renderProducts(filtered);
+}
+
+function openCart(){
+window.location="cart.html";
+}
+
+function openAccount(){
+window.location="account.html";
+}
+
+function logout(){
+    let confirmLogout = confirm("Do you want to log out?");
+    if(confirmLogout){
+        localStorage.removeItem("currentUser");
+        window.location="index.html";
+    }
+}
+
+let currentUser=localStorage.getItem("currentUser");
+
+if(currentUser){
+profileLink.textContent=currentUser;
+}
+
+updateCart();
+renderProducts();
+
+</script>
+
+</body>
+</html>

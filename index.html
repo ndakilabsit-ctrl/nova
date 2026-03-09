@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVAWEB</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f4f4f4;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  background:white;
+  padding:30px;
+  width:350px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(226, 58, 2, 0.841);
+}
+
+h2{text-align:center;}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #f90909;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  background:#f04e23;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+button:hover{background:#f04e23;}
+
+.link{
+  text-align:center;
+  cursor:pointer;
+  color:#cf3a10;
+}
+
+.password-box{
+  position:relative;
+}
+
+.eye-icon{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  width:22px;
+  height:22px;
+}
+
+/* Eye blink animation */
+.eye-open path, .eye-open circle{
+  stroke:rgb(196, 49, 4);
+}
+
+.eye-closed path, .eye-closed circle{
+  stroke:rgb;
+  opacity:0; /* hide pupil for closed eye */
+}
+
+.eye-closed line{
+  stroke:rgb;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN FORM -->
+<div id="loginForm">
+<h2 style="color: #f04e23;">Login</h2>
+
+<input id="loginUser" placeholder="Username">
+
+<div class="password-box">
+<input type="password" id="loginPass" placeholder="Password">
+
+<svg id="loginEye" class="eye-icon eye-open" onclick="toggleLoginPassword()" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="2" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="3"/>
+  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8"/>
+  <line x1="4" y1="4" x2="20" y2="20" stroke="black" stroke-width="2" class="blink-line" style="display:none"/>
+</svg>
+
+</div>
+
+<button onclick="login()">Login</button>
+<p class="link" onclick="showSignup()">Create Account</p>
+
+</div>
+
+<!-- SIGN UP FORM -->
+<div id="signupForm" style="display:none">
+
+<h2 style="color: #f04e23;">Sign Up</h2>
+
+<input id="signupUser" placeholder="Username">
+
+<input id="signupContact" placeholder="Contact Number" oninput="this.value=this.value.replace(/[^0-9]/g,'')" maxlength="11">
+
+<input id="signupAddress" placeholder="Address">
+
+<input id="signupEmail" placeholder="Email">
+
+<div class="password-box">
+<input type="password" id="signupPass" placeholder="Password">
+
+<svg id="signupEye" class="eye-icon eye-open" onclick="toggleSignupPassword()" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="2" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="3"/>
+  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8"/>
+  <line x1="4" y1="4" x2="20" y2="20" stroke="black" stroke-width="2" class="blink-line" style="display:none"/>
+</svg>
+
+</div>
+
+<button onclick="signup()">Sign Up</button>
+<p class="link" onclick="showLogin()">Already have account?</p>
+
+</div>
+
+</div>
+
+<script>
+function toggleLoginPassword(){
+  let pass=document.getElementById("loginPass");
+  let eye=document.getElementById("loginEye");
+  if(pass.type==="password"){
+    pass.type="text";
+    eye.classList.remove("eye-closed");
+    eye.classList.add("eye-open");
+    eye.querySelector(".blink-line").style.display="none";
+  } else{
+    pass.type="password";
+    eye.classList.remove("eye-open");
+    eye.classList.add("eye-closed");
+    eye.querySelector(".blink-line").style.display="block";
+  }
+}
+
+function toggleSignupPassword(){
+  let pass=document.getElementById("signupPass");
+  let eye=document.getElementById("signupEye");
+  if(pass.type==="password"){
+    pass.type="text";
+    eye.classList.remove("eye-closed");
+    eye.classList.add("eye-open");
+    eye.querySelector(".blink-line").style.display="none";
+  } else{
+    pass.type="password";
+    eye.classList.remove("eye-open");
+    eye.classList.add("eye-closed");
+    eye.querySelector(".blink-line").style.display="block";
+  }
+}
+
+function showSignup(){
+  loginForm.style.display="none";
+  signupForm.style.display="block";
+}
+
+function showLogin(){
+  signupForm.style.display="none";
+  loginForm.style.display="block";
+}
+
+function signup(){
+  let user = signupUser.value.trim();
+  let pass = signupPass.value.trim();
+  let email = signupEmail.value.trim();
+  let contact = signupContact.value.trim();
+  let address = signupAddress.value.trim();
+
+  if(!user || !pass || !email || !contact || !address){
+    alert("Fill all fields");
+    return;
+  }
+
+  // Email validation
+  let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  if(!email.match(emailPattern)){
+    alert("Enter a valid email");
+    return;
+  }
+
+  // Contact validation
+  if(contact.length!==11){
+    alert("Contact number must be 11 digits");
+    return;
+  }
+
+  if(localStorage.getItem(user)){
+    alert("Username already exists");
+    return;
+  }
+
+  localStorage.setItem(user, JSON.stringify({username:user,password:pass,email,contact,address}));
+  alert("Account Created!");
+  showLogin();
+}
+
+function login(){
+  let user=loginUser.value.trim();
+  let pass=loginPass.value.trim();
+
+  let stored=localStorage.getItem(user);
+  if(!stored){ alert("User not found"); return; }
+
+  let data=JSON.parse(stored);
+  if(data.password!==pass){ alert("Wrong password"); return; }
+
+  localStorage.setItem("currentUser", user);
+  window.location="shop.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Cart</title>
+
+<style>
+
+body{font-family:Arial;background:#f4f4f4}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.cart-item{
+background:white;
+padding:15px;
+margin-bottom:10px;
+border-radius:8px;
+display:flex;
+justify-content:space-between;
+}
+
+button{
+background:#f04e23;
+color:white;
+border:none;
+padding:8px 15px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>My Cart</h2>
+
+<div id="cartItems"></div>
+
+<button onclick="clearCart()">Clear Cart</button>
+<button onclick="goShop()">Back to Shop</button>
+
+</div>
+
+<script>
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+function loadCart(){
+
+cartItems.innerHTML="";
+
+if(cart.length===0){
+cartItems.innerHTML="Cart is empty";
+return;
+}
+
+cart.forEach((item,i)=>{
+
+cartItems.innerHTML+=`
+<div class="cart-item">
+<span>${item.name} - $${item.price}</span>
+<button onclick="removeItem(${i})">Remove</button>
+</div>
+`;
+
+});
+
+}
+
+function removeItem(i){
+cart.splice(i,1);
+localStorage.setItem("cart",JSON.stringify(cart));
+loadCart();
+}
+
+function clearCart(){
+localStorage.removeItem("cart");
+cart=[];
+loadCart();
+}
+
+function goShop(){
+window.location="shop.html";
+}
+
+loadCart();
+
+</script>
+
+</body>
+</html>
